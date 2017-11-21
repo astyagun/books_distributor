@@ -6,7 +6,6 @@
 /.rubocop.yml
 /.yardoc
 /coffeelint.json
-/config/database.yml
 /config/secrets.yml.key
 /config/settings.local.yml
 
