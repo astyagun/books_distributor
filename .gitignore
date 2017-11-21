@@ -1,0 +1,36 @@
+# Local configuration
+/.env
+/.haml-lint.yml
+/.overcommit.yml
+/.reek
+/.rubocop.yml
+/.yardoc
+/coffeelint.json
+/config/database.yml
+/config/secrets.yml.key
+/config/settings.local.yml
+
+# IDEs
+*.swo
+*.swp
+tags
+
+# Local Ruby environment
+/.docker-sync
+/node_modules
+
+# Logfiles and tempfiles
+!/log/.keep
+!/tmp/.keep
+.byebug_history
+/.sass-cache
+/coverage
+/log/*
+/public/image_uploads
+/public/system
+/public/uploads
+/tmp/*
+/yarn-error.log
+
+# Other
+.DS_Store
