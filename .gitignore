@@ -28,6 +28,7 @@ tags
 /public/image_uploads
 /public/system
 /public/uploads
+/spec/examples.txt
 /tmp/*
 /yarn-error.log
 
