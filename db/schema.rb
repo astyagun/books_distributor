@@ -45,4 +45,7 @@ ActiveRecord::Schema.define(version: 20171121100310) do
     t.datetime "updated_at", null: false
   end
 
+  add_foreign_key "book_shops", "books"
+  add_foreign_key "book_shops", "shops"
+  add_foreign_key "books", "publishers"
 end

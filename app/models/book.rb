@@ -3,5 +3,5 @@ class Book < ApplicationRecord
   has_many :book_shops, dependent: :destroy
   has_many :shops, through: :book_shops # rubocop:disable Rails/HasManyOrHasOneDependent
 
-  validates :title, presence: true
+  validates :title, :publisher, presence: true
 end
