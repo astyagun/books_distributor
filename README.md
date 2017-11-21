@@ -1,24 +1,42 @@
-# README
+# Books distributor
 
-This README would normally document whatever steps are necessary to get the
-application up and running.
+## Specifications
 
-Things you may want to cover:
+### Given
 
-* Ruby version
+Publishers produce books that are sold in shops.
+A book can be distributed via multiple shops.
+A shop can sell multiple copies of a book.
 
-* System dependencies
 
-* Configuration
+### What needs to be done
 
-* Database creation
+Please model the required database relations and create API Endpoints described below.
+The code should be covered with tests (rspec).
 
-* Database initialization
+**Endpoint 1**: for a specific Publisher it should return the list of shops selling at least one book of that publisher. Shops should be ordered by the number of books sold. Each shop should include the list of Publisher’s books that are currently in stock.
 
-* How to run the test suite
+Example response:
 
-* Services (job queues, cache servers, search engines, etc.)
+```json
+{
+  "shops": [
+   {
+     “id”: 1,
+     “name”: “Amazon”,
+     “books_sold_count”: 10,
+     “books_in_stock”: [
+       {
+         “id”: 2,
+         “title”: “Yiddish songs”,
+         “copies_in_stock”: 3
+       },
+       …
+     ]
+   },
+   …
+ ]
+}
+```
 
-* Deployment instructions
-
-* ...
+**Endpoint 2**: for a specific Shop it should mark one or multiple copies of a book as sold.
