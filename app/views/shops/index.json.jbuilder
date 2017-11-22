@@ -1,3 +1,4 @@
+json.status 200
 json.shops @publisher_shops do |publisher_shop|
   json.call publisher_shop.shop, :id, :name
   json.call publisher_shop,      :books_sold_count
