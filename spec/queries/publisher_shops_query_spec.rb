@@ -7,13 +7,22 @@ RSpec.describe PublisherShopsQuery do
     let!(:publisher) { create :publisher }
     let!(:shop) { create :shop }
     let!(:book) { create :book, publisher: publisher }
-    let!(:shop_book) { create :shop_book, shop: shop, book: book, copies_sold: 100 }
+    let! :shop_book do
+      create :shop_book, shop: shop, book: book, copies_sold: 100, copies_in_stock: copies_in_stock
+    end
     let!(:publisher_shop) { PublisherShop.find_by publisher: publisher, shop: shop }
+    let(:copies_in_stock) { 100 }
 
     it { is_expected.to eq [publisher_shop] }
 
     context 'when publisher_shop belongs to another publisher' do
       before { publisher_shop.update_attributes publisher: create(:publisher) }
+
+      it { is_expected.to eq [] }
+    end
+
+    context 'when there are 0 books currently in stock' do
+      let(:copies_in_stock) { 0 }
 
       it { is_expected.to eq [] }
     end
@@ -32,11 +41,19 @@ RSpec.describe PublisherShopsQuery do
     context 'when there are several books from this publisher in this shop' do
       let!(:book2) { create :book, publisher: publisher }
       let!(:book3) { create :book, publisher: publisher }
-      let!(:shop_book2) { create :shop_book, shop: shop, book: book2, copies_sold: 500 }
-      let!(:shop_book3) { create :shop_book, shop: shop, book: book3, copies_sold: 20 }
+      let!(:shop_book2) { create :shop_book, shop: shop, book: book2, copies_in_stock: 500 }
+      let!(:shop_book3) { create :shop_book, shop: shop, book: book3, copies_in_stock: 20 }
 
-      it 'orders them by ShopBook#copies_sold in descending order' do
+      it 'orders them by ShopBook#copies_in_stock in descending order' do
         expect(result.first.shop.shop_books.map(&:book).map(&:id)).to eq [book2.id, book.id, book3.id]
+      end
+
+      context 'when a book is out of stock' do
+        let(:copies_in_stock) { 0 }
+
+        it 'is not returned' do
+          expect(result.first.shop.shop_books.map(&:book).map(&:id)).to eq [book2.id, book3.id]
+        end
       end
     end
 

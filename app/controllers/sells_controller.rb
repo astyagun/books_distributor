@@ -11,7 +11,7 @@ class SellsController < ApplicationController
   end
 
   def create
-    ShopBook.find_by!(shop_id: shop.id, book_id: book.id).increment_copies_sold_by amount
+    SellShopBook.call ShopBook.find_by!(shop_id: shop.id, book_id: book.id), amount
     render json: {status: 200}
   end
 

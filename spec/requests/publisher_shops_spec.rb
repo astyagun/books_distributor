@@ -11,11 +11,18 @@ RSpec.describe 'Publisher shops', type: :request do
       let!(:publisher) { create :publisher }
       let!(:shop1) { create :shop }
       let!(:shop2) { create :shop }
+      let!(:shop3) { create :shop }
       let!(:book1) { create :book, publisher: publisher }
       let!(:book2) { create :book, publisher: publisher }
-      let!(:shop_book1) { create :shop_book, shop: shop1, book: book1, copies_sold: 42 }
-      let!(:shop_book2) { create :shop_book, shop: shop1, book: book2, copies_sold: 100500 }
+      let! :shop_book1 do
+        create :shop_book, shop: shop1, book: book1, copies_sold: 100500, copies_in_stock: 5
+      end
+      let!(:shop_book2) { create :shop_book, shop: shop1, book: book2, copies_sold: 42, copies_in_stock: 10 }
       let!(:shop_book3) { create :shop_book, shop: shop2, book: book1, copies_sold: 100543 }
+      let!(:shop_book4) { create :shop_book, shop: shop2, book: book2, copies_in_stock: 0 }
+      let! :shop_book4 do
+        create :shop_book, shop: shop3, book: book1, copies_sold: 999_999, copies_in_stock: 0
+      end
 
       it 'renders shops, that sell books of a publisher', :aggregate_failures do
         expect(parsed_response).to eq(

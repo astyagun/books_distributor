@@ -27,59 +27,11 @@ RSpec.describe ShopBook, type: :model do
     end
   end
 
-  describe '#increment_copies_sold_by' do
-    subject(:method_call) { instance.increment_copies_sold_by amount }
-
-    before { allow(instance).to receive :update_publisher_shop }
-    let!(:instance) { create described_class.to_s.underscore }
-    let(:amount) { 1 }
-
-    it 'calls #update_publisher_shop' do
-      method_call
-      expect(instance).to have_received :update_publisher_shop
-    end
-
-    it 'increments #copies_sold by 1' do
-      expect { method_call }.to change { instance.reload.copies_sold }.by 1
-    end
-
-    it 'updates #updated_at timestamp' do
-      expect { method_call }.to change { instance.reload.updated_at }
-    end
-
-    context 'when amount is 42' do
-      let(:amount) { 42 }
-
-      it 'increments #copies_sold by 42' do
-        expect { method_call }.to change { instance.reload.copies_sold }.by 42
-      end
-    end
-
-    context 'when amount is a string' do
-      let(:amount) { 'asasdafa' }
-
-      it 'it raises AmountArgumentError' do
-        expect { method_call }.to raise_error AmountArgumentError
-      end
-    end
-
-    context 'when calling method concurrently' do
-      let(:concurrent_instance) { described_class.find instance.id }
-
-      it 'increments #copies_sold by 2' do
-        expect do
-          concurrent_instance.increment_copies_sold_by amount
-          method_call
-        end.to change { instance.reload.copies_sold }.by 2
-      end
-    end
-  end
-
   describe '#update_publisher_shop' do
     subject(:method_call) { instance.update_publisher_shop }
 
     # rubocop:disable RSpec/AnyInstance
-    before { allow_any_instance_of(PublisherShop).to receive :update_books_sold_count }
+    before { allow_any_instance_of(PublisherShop).to receive :update_book_counts }
     # rubocop:enable RSpec/AnyInstance
     let!(:instance) { build described_class.to_s.underscore }
 
@@ -94,8 +46,8 @@ RSpec.describe ShopBook, type: :model do
 
     it_behaves_like 'creating PublisherShop'
 
-    it 'calls PublisherShop#update_books_sold_count' do
-      expect_any_instance_of(PublisherShop).to receive :update_books_sold_count
+    it 'calls PublisherShop#update_book_counts' do
+      expect_any_instance_of(PublisherShop).to receive :update_book_counts
       method_call
     end
 
@@ -126,8 +78,8 @@ RSpec.describe ShopBook, type: :model do
           expect { method_call }.not_to change(PublisherShop, :count)
         end
 
-        it 'calls PublisherShop#update_books_sold_count' do
-          expect_any_instance_of(PublisherShop).to receive :update_books_sold_count
+        it 'calls PublisherShop#update_book_counts' do
+          expect_any_instance_of(PublisherShop).to receive :update_book_counts
           method_call
         end
       end

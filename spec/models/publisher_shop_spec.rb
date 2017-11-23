@@ -3,8 +3,8 @@ require 'rails_helper'
 RSpec.describe PublisherShop, type: :model do
   it_behaves_like 'a model with a factory'
 
-  describe '#update_books_sold_count' do
-    subject(:method_call) { instance.update_books_sold_count }
+  describe '#update_book_counts' do
+    subject(:method_call) { instance.update_book_counts }
 
     # rubocop:disable RSpec/AnyInstance
     before { allow_any_instance_of(ShopBook).to receive :update_publisher_shop }
@@ -12,7 +12,11 @@ RSpec.describe PublisherShop, type: :model do
     let!(:instance) { create described_class.to_s.underscore }
 
     it 'does not change #books_sold_count' do
-      expect { method_call }.not_to change { instance.reload.books_sold_count }
+      expect { method_call }.not_to change { instance.reload.books_sold_count }.from 0
+    end
+
+    it 'does not change #books_in_stock_count' do
+      expect { method_call }.not_to change { instance.reload.books_in_stock_count }.from 0
     end
 
     context 'when shop_book exists' do
@@ -25,6 +29,10 @@ RSpec.describe PublisherShop, type: :model do
         expect { method_call }.not_to change { instance.reload.books_sold_count }
       end
 
+    it 'does not change #books_in_stock_count' do
+      expect { method_call }.not_to change { instance.reload.books_in_stock_count }
+    end
+
       context 'and it is of the same publisher and shop' do
         let(:publisher) { instance.publisher }
         let(:shop) { instance.shop }
@@ -33,6 +41,12 @@ RSpec.describe PublisherShop, type: :model do
           expect { method_call }.to change { instance.reload.books_sold_count }.
             from(0).
             to(shop_book.copies_sold)
+        end
+
+        it 'updates #books_in_stock_count to equal shop_book#copies_in_stock' do
+          expect { method_call }.to change { instance.reload.books_in_stock_count }.
+            from(0).
+            to(shop_book.copies_in_stock)
         end
 
         context 'and there is another shop_book with the same publisher and shop' do
@@ -44,6 +58,12 @@ RSpec.describe PublisherShop, type: :model do
               from(0).
               to(shop_book.copies_sold + another_shop_book.copies_sold)
           end
+
+          it 'updates #books_in_stock_count to be the sum of #copies_in_stock of these shop_books' do
+            expect { method_call }.to change { instance.reload.books_in_stock_count }.
+              from(0).
+              to(shop_book.copies_in_stock + another_shop_book.copies_in_stock)
+          end
         end
       end
 
@@ -53,6 +73,10 @@ RSpec.describe PublisherShop, type: :model do
         it 'does not change #books_sold_count' do
           expect { method_call }.not_to change { instance.reload.books_sold_count }
         end
+
+        it 'does not change #books_in_stock_count' do
+          expect { method_call }.not_to change { instance.reload.books_in_stock_count }
+        end
       end
 
       context "and it's shop is the same" do
@@ -60,6 +84,10 @@ RSpec.describe PublisherShop, type: :model do
 
         it 'does not change #books_sold_count' do
           expect { method_call }.not_to change { instance.reload.books_sold_count }
+        end
+
+        it 'does not change #books_in_stock_count' do
+          expect { method_call }.not_to change { instance.reload.books_in_stock_count }
         end
       end
     end
