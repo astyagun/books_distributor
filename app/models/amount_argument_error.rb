@@ -1,0 +1,1 @@
+AmountArgumentError = Class.new StandardError

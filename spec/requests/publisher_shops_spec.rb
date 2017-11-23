@@ -43,7 +43,7 @@ RSpec.describe 'Publisher shops', type: :request do
     context 'when publisher_id parameter does not have corresponding publisher in DB' do
       let(:publisher) { 123_456 }
 
-      it 'returns error message', :aggregate_failures do
+      it 'returns error', :aggregate_failures do
         expect(parsed_response).to eq(
           'status' => 404,
           'detail' => 'Record not found'
