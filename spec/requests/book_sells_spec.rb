@@ -37,14 +37,14 @@ RSpec.describe 'Book sells', type: :request do
         expect { parsed_response }.not_to change { shop_book.reload.copies_sold }
         expect(parsed_response).to eq(
           'status' => 400,
-          'detail' => 'Amount parameter has unacceptable value',
+          'detail' => 'Amount parameter has an unacceptable value, must be an integer',
           'code'   => 4001
         )
         expect(response).to have_http_status 400
       end
     end
 
-    context 'when shop_id param corresponds to non existent shop' do
+    context 'when there is no shop for a given shop_id parameter' do
       let(:shop_id) { 123_456 }
 
       it 'returns error', :aggregate_failures do
@@ -56,7 +56,7 @@ RSpec.describe 'Book sells', type: :request do
       end
     end
 
-    context 'when book_id param corresponds to non existent book' do
+    context 'when there is no book for a given book_id parameter' do
       let(:book_id) { 123_456 }
 
       it 'returns error', :aggregate_failures do

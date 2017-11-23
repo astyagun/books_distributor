@@ -30,11 +30,11 @@ RSpec.describe ShopBook, type: :model do
   describe '#increment_copies_sold_by' do
     subject(:method_call) { instance.increment_copies_sold_by amount }
 
+    before { allow(instance).to receive :update_publisher_shop }
     let!(:instance) { create described_class.to_s.underscore }
     let(:amount) { 1 }
 
     it 'calls #update_publisher_shop' do
-      allow(instance).to receive :update_publisher_shop
       method_call
       expect(instance).to have_received :update_publisher_shop
     end

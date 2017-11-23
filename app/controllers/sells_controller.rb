@@ -1,7 +1,11 @@
 class SellsController < ApplicationController
   rescue_from AmountArgumentError do |exception|
     render(
-      json: {'status' => 400, 'detail' => 'Amount parameter has unacceptable value', 'code' => 4001},
+      json: {
+        'status' => 400,
+        'detail' => 'Amount parameter has an unacceptable value, must be an integer',
+        'code'   => 4001
+      },
       status: 400
     )
   end

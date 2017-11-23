@@ -6,7 +6,9 @@ RSpec.describe PublisherShop, type: :model do
   describe '#update_books_sold_count' do
     subject(:method_call) { instance.update_books_sold_count }
 
+    # rubocop:disable RSpec/AnyInstance
     before { allow_any_instance_of(ShopBook).to receive :update_publisher_shop }
+    # rubocop:enable RSpec/AnyInstance
     let!(:instance) { create described_class.to_s.underscore }
 
     it 'does not change #books_sold_count' do
@@ -14,9 +16,9 @@ RSpec.describe PublisherShop, type: :model do
     end
 
     context 'when shop_book exists' do
-      let!(:book_publisher) { create :publisher }
+      let!(:publisher) { create :publisher }
       let!(:shop) { create :shop }
-      let!(:book) { create :book, publisher: book_publisher }
+      let!(:book) { create :book, publisher: publisher }
       let!(:shop_book) { create :shop_book, shop: shop, book: book }
 
       it 'does not change #books_sold_count' do
@@ -24,7 +26,7 @@ RSpec.describe PublisherShop, type: :model do
       end
 
       context 'and it is of the same publisher and shop' do
-        let(:book_publisher) { instance.publisher }
+        let(:publisher) { instance.publisher }
         let(:shop) { instance.shop }
 
         it 'updates #books_sold_count to equal shop_book#copies_sold' do
@@ -46,7 +48,7 @@ RSpec.describe PublisherShop, type: :model do
       end
 
       context "and it's publisher is the same" do
-        let(:publisher) { instance.book.publisher }
+        let(:publisher) { instance.publisher }
 
         it 'does not change #books_sold_count' do
           expect { method_call }.not_to change { instance.reload.books_sold_count }

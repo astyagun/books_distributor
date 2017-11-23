@@ -50,7 +50,7 @@ RSpec.describe PublisherShopsQuery do
       end
     end
 
-    context 'when shop_book and book of the publisher exist' do
+    context 'when shop_book and a book of the publisher exist' do
       before { create :shop_book, book: create(:book, publisher: publisher), shop: shop }
 
       it 'eager loads shops, shop_books and books', :aggregate_failures do
