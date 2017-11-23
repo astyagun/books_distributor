@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-RSpec.describe BookShop, type: :model do
+RSpec.describe ShopBook, type: :model do
   it_behaves_like 'a model with a factory'
 
   describe 'after create commit hook' do

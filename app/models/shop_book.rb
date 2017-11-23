@@ -1,6 +1,6 @@
-class BookShop < ApplicationRecord
-  belongs_to :book
+class ShopBook < ApplicationRecord
   belongs_to :shop
+  belongs_to :book
 
   after_commit :update_publisher_shop, on: %i[create update destroy]
 

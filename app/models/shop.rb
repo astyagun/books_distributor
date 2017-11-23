@@ -1,4 +1,4 @@
 class Shop < ApplicationRecord
-  has_many :book_shops, dependent: :destroy
-  has_many :books, through: :book_shops # rubocop:disable Rails/HasManyOrHasOneDependent
+  has_many :shop_books, dependent: :destroy
+  has_many :books, through: :shop_books # rubocop:disable Rails/HasManyOrHasOneDependent
 end

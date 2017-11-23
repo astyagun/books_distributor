@@ -3,11 +3,11 @@ class PublisherShop < ApplicationRecord
   belongs_to :shop
 
   def update_books_sold_count
-    update_attributes books_sold_count: BookShop.
+    update_attributes books_sold_count: ShopBook.
       joins(:book).
-      where(books: {publisher_id: publisher_id}, shop_id: shop_id).
-      group('books.publisher_id, book_shops.shop_id').
-      pluck('SUM(book_shops.copies_sold)').
+      where(shop_id: shop_id, books: {publisher_id: publisher_id}).
+      group('books.publisher_id, shop_books.shop_id').
+      pluck('SUM(shop_books.copies_sold)').
       first || 0
   end
 end

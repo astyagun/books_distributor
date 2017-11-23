@@ -1,5 +1,5 @@
 class Book < ApplicationRecord
   belongs_to :publisher
-  has_many :book_shops, dependent: :destroy
-  has_many :shops, through: :book_shops # rubocop:disable Rails/HasManyOrHasOneDependent
+  has_many :shop_books, dependent: :destroy
+  has_many :shops, through: :shop_books # rubocop:disable Rails/HasManyOrHasOneDependent
 end

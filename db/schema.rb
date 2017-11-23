@@ -15,18 +15,6 @@ ActiveRecord::Schema.define(version: 20171122165318) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
-  create_table "book_shops", force: :cascade do |t|
-    t.bigint "book_id"
-    t.bigint "shop_id"
-    t.integer "copies_in_stock", default: 0, null: false
-    t.integer "copies_sold", default: 0, null: false
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.index ["book_id", "shop_id"], name: "index_book_shops_on_book_id_and_shop_id", unique: true
-    t.index ["book_id"], name: "index_book_shops_on_book_id"
-    t.index ["shop_id"], name: "index_book_shops_on_shop_id"
-  end
-
   create_table "books", force: :cascade do |t|
     t.string "title", null: false
     t.bigint "publisher_id"
@@ -51,15 +39,27 @@ ActiveRecord::Schema.define(version: 20171122165318) do
     t.datetime "updated_at", null: false
   end
 
+  create_table "shop_books", force: :cascade do |t|
+    t.bigint "shop_id"
+    t.bigint "book_id"
+    t.integer "copies_in_stock", default: 0, null: false
+    t.integer "copies_sold", default: 0, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["book_id"], name: "index_shop_books_on_book_id"
+    t.index ["shop_id", "book_id"], name: "index_shop_books_on_shop_id_and_book_id", unique: true
+    t.index ["shop_id"], name: "index_shop_books_on_shop_id"
+  end
+
   create_table "shops", force: :cascade do |t|
     t.string "name", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
 
-  add_foreign_key "book_shops", "books"
-  add_foreign_key "book_shops", "shops"
   add_foreign_key "books", "publishers"
   add_foreign_key "publisher_shops", "publishers"
   add_foreign_key "publisher_shops", "shops"
+  add_foreign_key "shop_books", "books"
+  add_foreign_key "shop_books", "shops"
 end

@@ -7,7 +7,7 @@ RSpec.describe 'Book sells', type: :request do
       JSON.parse response.body
     end
 
-    let!(:book_shop) { create :book_shop, shop: shop, book: book }
+    let!(:shop_book) { create :shop_book, shop: shop, book: book }
     let(:shop) { create :shop }
     let(:book) { create :book }
     let(:shop_id) { shop.id }
@@ -15,7 +15,7 @@ RSpec.describe 'Book sells', type: :request do
     let(:amount) { nil }
 
     it 'sells a book', :aggregate_failures do
-      expect { parsed_response }.to change { book_shop.reload.copies_sold }.by 1
+      expect { parsed_response }.to change { shop_book.reload.copies_sold }.by 1
       expect(parsed_response).to eq 'status' => 200
       expect(response).to have_http_status 200
     end
@@ -24,7 +24,7 @@ RSpec.describe 'Book sells', type: :request do
       let(:amount) { '500' }
 
       it 'sells 500 books', :aggregate_failures do
-        expect { parsed_response }.to change { book_shop.reload.copies_sold }.by 500
+        expect { parsed_response }.to change { shop_book.reload.copies_sold }.by 500
         expect(parsed_response).to eq 'status' => 200
         expect(response).to have_http_status 200
       end
@@ -34,7 +34,7 @@ RSpec.describe 'Book sells', type: :request do
       let(:amount) { 'lorem' }
 
       it 'renders error', :aggregate_failures do
-        expect { parsed_response }.not_to change { book_shop.reload.copies_sold }
+        expect { parsed_response }.not_to change { shop_book.reload.copies_sold }
         expect(parsed_response).to eq(
           'status' => 400,
           'detail' => 'Amount parameter has unacceptable value',
