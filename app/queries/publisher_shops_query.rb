@@ -7,6 +7,6 @@ class PublisherShopsQuery
     PublisherShop.
       includes(shop: {book_shops: :book}).
       where(publisher_shops: {publisher_id: publisher_id}, books: {publisher_id: publisher_id}).
-      order('publisher_shops.books_sold_count DESC')
+      order('publisher_shops.books_sold_count DESC, book_shops.copies_sold DESC').limit 1000
   end
 end

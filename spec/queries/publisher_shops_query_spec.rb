@@ -29,6 +29,17 @@ RSpec.describe PublisherShopsQuery do
       end
     end
 
+    context 'when there are several books from this publisher in this shop' do
+      let!(:book2) { create :book, publisher: publisher }
+      let!(:book3) { create :book, publisher: publisher }
+      let!(:book_shop2) { create :book_shop, book: book2, shop: shop, copies_sold: 500 }
+      let!(:book_shop3) { create :book_shop, book: book3, shop: shop, copies_sold: 20 }
+
+      it 'orders them by BookShop#copies_sold in descending order' do
+        expect(result.first.shop.book_shops.map(&:book).map(&:id)).to eq [book2.id, book.id, book3.id]
+      end
+    end
+
     context 'when shop sells a book of another publisher' do
       let!(:another_publisher) { create :publisher }
       let!(:another_book) { create :book, publisher: another_publisher }
