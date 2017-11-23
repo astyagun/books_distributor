@@ -35,12 +35,16 @@ RSpec.describe BookShop, type: :model do
     # rubocop:enable RSpec/AnyInstance
     let!(:instance) { build described_class.to_s.underscore }
 
-    it 'creates PublisherShop with matching #publisher and #shop' do
-      expect { method_call }.to change(
-        PublisherShop.where(publisher_id: instance.book.publisher_id, shop_id: instance.shop_id),
-        :count
-      ).by 1
+    shared_examples_for 'creating PublisherShop' do
+      it 'creates PublisherShop with matching #publisher and #shop' do
+        expect { method_call }.to change(
+          PublisherShop.where(publisher_id: instance.book.publisher_id, shop_id: instance.shop_id),
+          :count
+        ).by 1
+      end
     end
+
+    it_behaves_like 'creating PublisherShop'
 
     it 'calls PublisherShop#update_books_sold_count' do
       expect_any_instance_of(PublisherShop).to receive :update_books_sold_count
@@ -52,33 +56,18 @@ RSpec.describe BookShop, type: :model do
       let!(:shop) { create :shop }
       let!(:publisher_shop) { create :publisher_shop, publisher: publisher, shop: shop }
 
-      it 'creates PublisherShop with matching #publisher and #shop' do
-        expect { method_call }.to change(
-          PublisherShop.where(publisher_id: instance.book.publisher_id, shop_id: instance.shop_id),
-          :count
-        ).by 1
-      end
+      it_behaves_like 'creating PublisherShop'
 
       context 'with matching #publisher' do
         let(:publisher) { instance.book.publisher }
 
-        it 'creates PublisherShop with matching publisher and shop' do
-          expect { method_call }.to change(
-            PublisherShop.where(publisher_id: instance.book.publisher_id, shop_id: instance.shop_id),
-            :count
-          ).by 1
-        end
+        it_behaves_like 'creating PublisherShop'
       end
 
       context 'with matching #shop' do
         let(:shop) { instance.shop }
 
-        it 'creates PublisherShop with matching publisher and shop' do
-          expect { method_call }.to change(
-            PublisherShop.where(publisher_id: instance.book.publisher_id, shop_id: instance.shop_id),
-            :count
-          ).by 1
-        end
+        it_behaves_like 'creating PublisherShop'
       end
 
       context 'with matching #publisher and #shop' do
