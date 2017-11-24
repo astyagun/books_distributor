@@ -32,7 +32,7 @@ RSpec.describe 'Publisher shops', type: :request do
               'id'               => shop2.id,
               'name'             => shop2.name,
               'books_sold_count' => shop_book3.copies_sold,
-              'books'            => [
+              'books_in_stock'   => [
                 {
                   'id'              => book1.id,
                   'title'           => book1.title,
@@ -44,7 +44,7 @@ RSpec.describe 'Publisher shops', type: :request do
               'id'               => shop1.id,
               'name'             => shop1.name,
               'books_sold_count' => shop_book1.copies_sold + shop_book2.copies_sold,
-              'books'            => [
+              'books_in_stock'   => [
                 {
                   'id'              => book2.id,
                   'title'           => book2.title,
