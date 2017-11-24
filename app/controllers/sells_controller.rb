@@ -1,5 +1,5 @@
 class SellsController < ApplicationController
-  rescue_from AmountArgumentError do |exception|
+  rescue_from AmountArgumentError do
     render(
       json: {
         'status' => 400,

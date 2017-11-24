@@ -11,6 +11,12 @@ RSpec.describe PublisherShop, type: :model do
     # rubocop:enable RSpec/AnyInstance
     let!(:instance) { create described_class.to_s.underscore }
 
+    shared_examples_for 'not changing #books_sold_count' do
+      it 'does not change #books_sold_count' do
+        expect { method_call }.not_to change { instance.reload.books_sold_count }.from 0
+      end
+    end
+
     it 'does not change #books_sold_count' do
       expect { method_call }.not_to change { instance.reload.books_sold_count }.from 0
     end
@@ -50,17 +56,13 @@ RSpec.describe PublisherShop, type: :model do
       context "and it's publisher is the same" do
         let(:publisher) { instance.publisher }
 
-        it 'does not change #books_sold_count' do
-          expect { method_call }.not_to change { instance.reload.books_sold_count }.from 0
-        end
+        include_examples 'not changing #books_sold_count'
       end
 
       context "and it's shop is the same" do
         let(:shop) { instance.shop }
 
-        it 'does not change #books_sold_count' do
-          expect { method_call }.not_to change { instance.reload.books_sold_count }.from 0
-        end
+        include_examples 'not changing #books_sold_count'
       end
     end
   end

@@ -22,7 +22,7 @@ RSpec.describe SellShopBook do
     end
 
     it 'updates #updated_at timestamp' do
-      expect { method_call }.to change { shop_book.reload.updated_at }
+      expect { method_call }.to(change { shop_book.reload.updated_at })
     end
 
     context 'when amount is 42' do
@@ -40,7 +40,7 @@ RSpec.describe SellShopBook do
     context 'when amount is a string' do
       let(:amount) { 'asasdafa' }
 
-      it 'it raises AmountArgumentError' do
+      it 'raises AmountArgumentError' do
         expect { method_call }.to raise_error AmountArgumentError
       end
     end

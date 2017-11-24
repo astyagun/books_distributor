@@ -14,27 +14,29 @@ RSpec.describe 'Book sells', type: :request do
     let(:book_id) { book.id }
     let(:amount) { nil }
 
-    it 'sells a book', :aggregate_failures do
-      expect { parsed_response }.to change { shop_book.reload.copies_sold }.by 1
-      expect(parsed_response).to eq 'status' => 200
-      expect(response).to have_http_status 200
-    end
-
-    context 'when amount is 500' do
-      let(:amount) { '500' }
-
-      it 'sells 500 books', :aggregate_failures do
-        expect { parsed_response }.to change { shop_book.reload.copies_sold }.by 500
+    shared_examples_for 'selling books' do |number|
+      it "sells #{number} #{'book'.pluralize(number)}", :aggregate_failures do
+        expect { parsed_response }.to change { shop_book.reload.copies_sold }.by(number).
+          and change { shop_book.reload.copies_in_stock }.by(-number)
         expect(parsed_response).to eq 'status' => 200
         expect(response).to have_http_status 200
       end
     end
 
+    include_examples 'selling books', 1
+
+    context 'when amount is 500' do
+      let(:amount) { '500' }
+
+      include_examples 'selling books', 500
+    end
+
     context 'when amount is a string' do
       let(:amount) { 'lorem' }
 
-      it 'renders error', :aggregate_failures do
-        expect { parsed_response }.not_to change { shop_book.reload.copies_sold }
+      it 'renders 400 error', :aggregate_failures do
+        expect { parsed_response }.to change { shop_book.reload.copies_sold }.by(0).
+          and change { shop_book.reload.copies_in_stock }.by(0)
         expect(parsed_response).to eq(
           'status' => 400,
           'detail' => 'Amount parameter has an unacceptable value, must be an integer',
@@ -47,25 +49,13 @@ RSpec.describe 'Book sells', type: :request do
     context 'when there is no shop for a given shop_id parameter' do
       let(:shop_id) { 123_456 }
 
-      it 'returns error', :aggregate_failures do
-        expect(parsed_response).to eq(
-          'status' => 404,
-          'detail' => 'Record not found'
-        )
-        expect(response).to have_http_status :not_found
-      end
+      include_examples 'rendering 404 error'
     end
 
     context 'when there is no book for a given book_id parameter' do
       let(:book_id) { 123_456 }
 
-      it 'returns error', :aggregate_failures do
-        expect(parsed_response).to eq(
-          'status' => 404,
-          'detail' => 'Record not found'
-        )
-        expect(response).to have_http_status :not_found
-      end
+      include_examples 'rendering 404 error'
     end
   end
 end

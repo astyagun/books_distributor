@@ -15,12 +15,12 @@ RSpec.describe 'Publisher shops', type: :request do
       let!(:book1) { create :book, publisher: publisher }
       let!(:book2) { create :book, publisher: publisher }
       let! :shop_book1 do
-        create :shop_book, shop: shop1, book: book1, copies_sold: 100500, copies_in_stock: 5
+        create :shop_book, shop: shop1, book: book1, copies_sold: 100_500, copies_in_stock: 5
       end
       let!(:shop_book2) { create :shop_book, shop: shop1, book: book2, copies_sold: 42, copies_in_stock: 10 }
-      let!(:shop_book3) { create :shop_book, shop: shop2, book: book1, copies_sold: 100543 }
-      let!(:shop_book4) { create :shop_book, shop: shop2, book: book2, copies_in_stock: 0 }
-      let! :shop_book4 do
+      let!(:shop_book3) { create :shop_book, shop: shop2, book: book1, copies_sold: 100_543 }
+      let!(:shop_book4) { create :shop_book, shop: shop2, book: book2, copies_sold: 1, copies_in_stock: 0 }
+      let! :shop_book5 do
         create :shop_book, shop: shop3, book: book1, copies_sold: 999_999, copies_in_stock: 0
       end
 
@@ -31,7 +31,7 @@ RSpec.describe 'Publisher shops', type: :request do
             {
               'id'               => shop2.id,
               'name'             => shop2.name,
-              'books_sold_count' => shop_book3.copies_sold,
+              'books_sold_count' => shop_book3.copies_sold + shop_book4.copies_sold,
               'books_in_stock'   => [
                 {
                   'id'              => book1.id,
@@ -66,13 +66,7 @@ RSpec.describe 'Publisher shops', type: :request do
     context 'when there is no publisher for a given publisher_id parameter' do
       let(:publisher) { 123_456 }
 
-      it 'returns error', :aggregate_failures do
-        expect(parsed_response).to eq(
-          'status' => 404,
-          'detail' => 'Record not found'
-        )
-        expect(response).to have_http_status :not_found
-      end
+      include_examples 'rendering 404 error'
     end
   end
 end

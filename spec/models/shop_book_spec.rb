@@ -44,10 +44,12 @@ RSpec.describe ShopBook, type: :model do
       end
     end
 
-    it_behaves_like 'creating PublisherShop'
+    include_examples 'creating PublisherShop'
 
     it 'calls PublisherShop#update_books_sold_count' do
+      # rubocop:disable RSpec/AnyInstance
       expect_any_instance_of(PublisherShop).to receive :update_books_sold_count
+      # rubocop:enable RSpec/AnyInstance
       method_call
     end
 
@@ -56,18 +58,18 @@ RSpec.describe ShopBook, type: :model do
       let!(:shop) { create :shop }
       let!(:publisher_shop) { create :publisher_shop, publisher: publisher, shop: shop }
 
-      it_behaves_like 'creating PublisherShop'
+      include_examples 'creating PublisherShop'
 
       context 'with matching #publisher' do
         let(:publisher) { instance.book.publisher }
 
-        it_behaves_like 'creating PublisherShop'
+        include_examples 'creating PublisherShop'
       end
 
       context 'with matching #shop' do
         let(:shop) { instance.shop }
 
-        it_behaves_like 'creating PublisherShop'
+        include_examples 'creating PublisherShop'
       end
 
       context 'with matching #publisher and #shop' do
@@ -79,7 +81,9 @@ RSpec.describe ShopBook, type: :model do
         end
 
         it 'calls PublisherShop#update_books_sold_count' do
+          # rubocop:disable RSpec/AnyInstance
           expect_any_instance_of(PublisherShop).to receive :update_books_sold_count
+          # rubocop:enable RSpec/AnyInstance
           method_call
         end
       end
