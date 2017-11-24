@@ -31,7 +31,7 @@ RSpec.describe ShopBook, type: :model do
     subject(:method_call) { instance.update_publisher_shop }
 
     # rubocop:disable RSpec/AnyInstance
-    before { allow_any_instance_of(PublisherShop).to receive :update_book_counts }
+    before { allow_any_instance_of(PublisherShop).to receive :update_books_sold_count }
     # rubocop:enable RSpec/AnyInstance
     let!(:instance) { build described_class.to_s.underscore }
 
@@ -46,8 +46,8 @@ RSpec.describe ShopBook, type: :model do
 
     it_behaves_like 'creating PublisherShop'
 
-    it 'calls PublisherShop#update_book_counts' do
-      expect_any_instance_of(PublisherShop).to receive :update_book_counts
+    it 'calls PublisherShop#update_books_sold_count' do
+      expect_any_instance_of(PublisherShop).to receive :update_books_sold_count
       method_call
     end
 
@@ -78,8 +78,8 @@ RSpec.describe ShopBook, type: :model do
           expect { method_call }.not_to change(PublisherShop, :count)
         end
 
-        it 'calls PublisherShop#update_book_counts' do
-          expect_any_instance_of(PublisherShop).to receive :update_book_counts
+        it 'calls PublisherShop#update_books_sold_count' do
+          expect_any_instance_of(PublisherShop).to receive :update_books_sold_count
           method_call
         end
       end

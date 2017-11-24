@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20171123161931) do
+ActiveRecord::Schema.define(version: 20171122165318) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -29,7 +29,6 @@ ActiveRecord::Schema.define(version: 20171123161931) do
     t.integer "books_sold_count", default: 0, null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.integer "books_in_stock_count", default: 0, null: false
     t.index ["publisher_id", "shop_id"], name: "index_publisher_shops_on_publisher_id_and_shop_id", unique: true
     t.index ["publisher_id"], name: "index_publisher_shops_on_publisher_id"
     t.index ["shop_id"], name: "index_publisher_shops_on_shop_id"
