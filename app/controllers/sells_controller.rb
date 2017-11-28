@@ -11,19 +11,14 @@ class SellsController < ApplicationController
   end
 
   def create
-    SellShopBook.call ShopBook.find_by!(shop_id: shop.id, book_id: book.id), amount
+    SellShopBook.call(
+      ShopBook.find_by!(shop_id: params[:shop_id], book_id: params[:book_id]),
+      amount
+    )
     render json: {status: 200}
   end
 
   private
-
-  def shop
-    Shop.select(:id).find params[:shop_id]
-  end
-
-  def book
-    Book.select(:id).find params[:book_id]
-  end
 
   # :reek:DuplicateMethodCall
   def amount
