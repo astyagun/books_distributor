@@ -5,6 +5,7 @@ RSpec.describe SellShopBook do
     subject(:method_call) { described_class.call shop_book, amount }
 
     before { allow(shop_book).to receive :update_publisher_shop }
+
     let!(:shop_book) { create :shop_book }
     let(:amount) { 1 }
 

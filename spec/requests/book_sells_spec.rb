@@ -16,10 +16,10 @@ RSpec.describe 'Book sells', type: :request do
 
     shared_examples_for 'selling books' do |number|
       it "sells #{number} #{'book'.pluralize(number)}", :aggregate_failures do
-        expect { parsed_response }.to change { shop_book.reload.copies_sold }.by(number).
-          and change { shop_book.reload.copies_in_stock }.by(-number)
+        expect { parsed_response }.to change { shop_book.reload.copies_sold }.by(number)
+          .and change { shop_book.reload.copies_in_stock }.by(-number)
         expect(parsed_response).to eq 'status' => 200
-        expect(response).to have_http_status 200
+        expect(response).to have_http_status :ok
       end
     end
 
@@ -35,14 +35,14 @@ RSpec.describe 'Book sells', type: :request do
       let(:amount) { 'lorem' }
 
       it 'renders 400 error', :aggregate_failures do
-        expect { parsed_response }.to change { shop_book.reload.copies_sold }.by(0).
-          and change { shop_book.reload.copies_in_stock }.by(0)
+        expect { parsed_response }.to change { shop_book.reload.copies_sold }.by(0)
+          .and change { shop_book.reload.copies_in_stock }.by(0)
         expect(parsed_response).to eq(
           'status' => 400,
           'detail' => 'Amount parameter has an unacceptable value, must be an integer',
           'code'   => 4001
         )
-        expect(response).to have_http_status 400
+        expect(response).to have_http_status :bad_request
       end
     end
 

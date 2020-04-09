@@ -9,11 +9,11 @@ class PublisherShop < ApplicationRecord
   private
 
   def query_books_sold_count
-    ShopBook.
-      joins(:book).
-      where(shop_id: shop_id, books: {publisher_id: publisher_id}).
-      group('books.publisher_id, shop_books.shop_id').
-      pluck('SUM(shop_books.copies_sold)').
-      first || 0
+    ShopBook
+      .joins(:book)
+      .where(shop_id: shop_id, books: {publisher_id: publisher_id})
+      .group('books.publisher_id, shop_books.shop_id')
+      .pluck('SUM(shop_books.copies_sold)')
+      .first || 0
   end
 end

@@ -33,6 +33,7 @@ RSpec.describe ShopBook, type: :model do
     # rubocop:disable RSpec/AnyInstance
     before { allow_any_instance_of(PublisherShop).to receive :update_books_sold_count }
     # rubocop:enable RSpec/AnyInstance
+
     let!(:instance) { build described_class.to_s.underscore }
 
     shared_examples_for 'creating PublisherShop' do

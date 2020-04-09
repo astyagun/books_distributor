@@ -9,6 +9,7 @@ RSpec.describe PublisherShop, type: :model do
     # rubocop:disable RSpec/AnyInstance
     before { allow_any_instance_of(ShopBook).to receive :update_publisher_shop }
     # rubocop:enable RSpec/AnyInstance
+
     let!(:instance) { create described_class.to_s.underscore }
 
     shared_examples_for 'not changing #books_sold_count' do
@@ -36,9 +37,9 @@ RSpec.describe PublisherShop, type: :model do
         let(:shop) { instance.shop }
 
         it 'updates #books_sold_count to equal shop_book#copies_sold' do
-          expect { method_call }.to change { instance.reload.books_sold_count }.
-            from(0).
-            to(shop_book.copies_sold)
+          expect { method_call }.to change { instance.reload.books_sold_count }
+            .from(0)
+            .to(shop_book.copies_sold)
         end
 
         context 'and there is another shop_book with the same publisher and shop' do
@@ -46,9 +47,9 @@ RSpec.describe PublisherShop, type: :model do
           let!(:another_shop_book) { create :shop_book, book: another_book, shop: instance.shop }
 
           it 'updates #books_sold_count to be the sum of #copies_sold of these shop_books' do
-            expect { method_call }.to change { instance.reload.books_sold_count }.
-              from(0).
-              to(shop_book.copies_sold + another_shop_book.copies_sold)
+            expect { method_call }.to change { instance.reload.books_sold_count }
+              .from(0)
+              .to(shop_book.copies_sold + another_shop_book.copies_sold)
           end
         end
       end
