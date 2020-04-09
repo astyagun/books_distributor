@@ -6,18 +6,13 @@ Rails API demo application
 
 ### Given
 
-Publishers produce books that are sold in shops.
-A book can be distributed via multiple shops.
-A shop can sell multiple copies of a book.
+* Publishers produce books that are sold in shops.
+* A book can be distributed via multiple shops.
+* A shop can sell multiple copies of a book.
 
-### What needs to be done
+### API
 
-Please model the required database relations and create API Endpoints described below.
-The code should be covered with tests (RSpec).
-
-**Endpoint 1**: for a specific Publisher it should return the list of shops selling at least one book of that
-publisher. Shops should be ordered by the number of books sold. Each shop should include the list of
-Publisher's books that are currently in stock.
+**Endpoint 1**: for a specific Publisher it should return the list of shops selling at least one book of that publisher. Shops should be ordered by the number of books sold. Each shop should include the list of Publisher's books that are currently in stock.
 
 Example response:
 
@@ -43,3 +38,7 @@ Example response:
 ```
 
 **Endpoint 2**: for a specific Shop it should mark one or multiple copies of a book as sold.
+
+### Development
+
+[Docker development environment](DOCKER.LOCAL.md)

@@ -1,0 +1,46 @@
+FROM ruby:2.4
+
+RUN apt-get update \
+  && apt-get install -y --no-install-recommends \
+    less \
+    nodejs \
+    npm \
+    postgresql-client-11 \
+    vim \
+    xauth \
+    xvfb \
+  && rm -rf /var/lib/apt/lists/*
+
+RUN npm install -g yarn
+
+# Reasons for installing packages
+# - less: better pager, for Pry in particular, but not only
+# - nodejs: assets compilation
+# - npm: yarn
+# - postgresql-client-11: rails dbconsole
+# - vim: rails secrets:edit, rails credentials:edit, bundle open, etc.
+# - xauth and xvfb: headless browser testing
+# - yarn: webpacker
+
+RUN adduser --disabled-password --gecos '' app
+USER app
+
+COPY config/docker.vimrc ~/.vimrc
+# RUN bundle config set jobs $(nproc --ignore=1)
+RUN bundle config jobs $(nproc --ignore=1)
+ENV EDITOR=vim DISPLAY=:0
+
+# Setup the Solargraph LSP server for code autocompletion and navigation
+RUN gem install solargraph && solargraph download-core
+# For the "Go to definition" feature: make gems available on the host matchine
+# RUN bundle config set path vendor/bundle
+RUN bundle config path vendor/bundle
+# Allow running bundled gems executables without using `bundle exec`
+# ENV GEM_PATH=/usr/src/app/vendor/bundle/ruby/2.7.0:/usr/local/lib/ruby/gems/2.7.0:/usr/local/bundle
+# ENV PATH=/usr/src/app/vendor/bundle/ruby/2.7.0/bin:$PATH
+ENV GEM_PATH=/usr/src/app/vendor/bundle:/usr/local/lib/ruby/gems/2.4.0:/home/app/.gem/ruby/2.4.0:/usr/local/bundle
+ENV PATH=/usr/src/app/vendor/bundle/bin:$PATH
+
+WORKDIR /usr/src/app
+
+CMD ["bin/docker-spring"]

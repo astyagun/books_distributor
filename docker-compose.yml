@@ -1,36 +1,56 @@
+# Local development environment
 ---
-version: '3'
+version: '3.7'
 services:
+  spring:
+    build:
+      context: .
+      dockerfile: development.docker
+    env_file: .docker.env
+    volumes:
+      - code:/usr/src/app:nocopy
+    depends_on:
+      - postgres
+
   rails:
     build:
       context: .
-      dockerfile: rails.dockerfile
-    env_file: .env
+      dockerfile: development.docker
+    env_file: .docker.env
+    command: bin/docker-rails-server
+    stdin_open: true
+    tty: true
     volumes:
       - code:/usr/src/app:nocopy
-      - bundle:/usr/local/bundle
     ports:
       - "${PORT:-3000}:3000"
     depends_on:
       - postgres
 
-  spring:
-    build:
-      context: .
-      dockerfile: spring.dockerfile
-    env_file: .env
-    volumes:
-      - code:/usr/src/app:nocopy
-      - bundle:/usr/local/bundle
-    depends_on:
-      - postgres
-
   postgres:
-    image: postgres:9.6
+    image: postgres:12.2
+    environment:
+      POSTGRES_PASSWORD: postgres
     volumes:
       - postgres:/var/lib/postgresql/data
 
+  solargraph:
+    build:
+      context: .
+      dockerfile: development.docker
+    working_dir: $PWD
+    env_file: .docker.env
+    environment:
+      # GEM_PATH: $PWD/vendor/bundle/ruby/2.7.0:/usr/local/lib/ruby/gems/2.7.0:/usr/local/bundle
+      # PATH: $PWD/vendor/bundle/ruby/2.7.0/bin:/usr/local/bundle/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
+      GEM_PATH: $PWD/vendor/bundle:/usr/local/lib/ruby/gems/2.4.0:/home/app/.gem/ruby/2.4.0:/usr/local/bundle
+      PATH: $PWD/vendor/bundle/bin:/usr/local/bundle/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
+    command: solargraph socket --host 0.0.0.0 --port 7658
+    volumes:
+      - code:$PWD:nocopy
+    ports:
+      - 7658:7658
+
 volumes:
   code:
-  bundle:
   postgres:

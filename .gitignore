@@ -1,7 +1,7 @@
 # Local configuration
+/.docker.env
 /.env
 /.haml-lint.yml
-/.overcommit.yml
 /.reek
 /.rubocop.yml
 /.yardoc
@@ -12,11 +12,11 @@
 # IDEs
 *.swo
 *.swp
-tags
 
 # Local Ruby environment
 /.docker-sync
 /node_modules
+/vendor/bundle
 
 # Logfiles and tempfiles
 !/log/.keep
