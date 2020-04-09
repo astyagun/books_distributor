@@ -16,7 +16,7 @@ RSpec.describe ShopBook, type: :model do
   end
 
   describe 'after update commit hook' do
-    subject(:instance_update) { instance.update_attributes copies_sold: 123 }
+    subject(:instance_update) { instance.update copies_sold: 123 }
 
     let!(:instance) { create described_class.to_s.underscore }
 
@@ -37,10 +37,9 @@ RSpec.describe ShopBook, type: :model do
 
     shared_examples_for 'creating PublisherShop' do
       it 'creates PublisherShop with matching #publisher and #shop' do
-        expect { method_call }.to change(
-          PublisherShop.where(publisher_id: instance.book.publisher_id, shop_id: instance.shop_id),
-          :count
-        ).by 1
+        expect { method_call }.to change {
+          PublisherShop.where(publisher_id: instance.book.publisher.id, shop_id: instance.shop.id).count
+        }.by 1
       end
     end
 

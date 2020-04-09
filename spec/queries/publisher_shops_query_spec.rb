@@ -16,7 +16,7 @@ RSpec.describe PublisherShopsQuery do
     it { is_expected.to eq [publisher_shop] }
 
     context 'when publisher_shop belongs to another publisher' do
-      before { publisher_shop.update_attributes publisher: create(:publisher) }
+      before { publisher_shop.update publisher: create(:publisher) }
 
       it { is_expected.to eq [] }
     end

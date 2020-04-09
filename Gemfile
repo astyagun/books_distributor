@@ -1,25 +1,26 @@
 source 'https://rubygems.org'
 
-gem 'jbuilder', '~> 2.5'
-gem 'pg', '~> 0.18'
-gem 'puma', '~> 3.7'
-gem 'rails', '~> 5.1.4'
+ruby '2.7.1'
+gem 'rails', '6.0.2.2'
+
+gem 'jbuilder'
+gem 'pg'
+gem 'puma'
 
 group :development, :test do
-  gem 'factory_bot_rails', '~> 4.8'
-  gem 'faker', '~> 1.8'
-  gem 'rspec-rails', '~> 3.7'
-
   gem 'byebug', platforms: %i[mri mingw x64_mingw]
+  gem 'factory_bot_rails'
+  gem 'faker'
   gem 'pry-byebug'
   gem 'pry-rails'
   gem 'pry-rescue'
   gem 'pry-stack_explorer'
+  gem 'rspec-rails'
 end
 
 group :development do
-  gem 'listen', '>= 3.0.5', '< 3.2'
+  gem 'listen'
   gem 'spring'
   gem 'spring-commands-rspec'
-  gem 'spring-watcher-listen', '~> 2.0.0'
+  gem 'spring-watcher-listen'
 end

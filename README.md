@@ -6,9 +6,9 @@ Rails API demo application
 
 ### Given
 
-* Publishers produce books that are sold in shops.
-* A book can be distributed via multiple shops.
-* A shop can sell multiple copies of a book.
+* Publishers produce books that are sold in shops
+* A book can be distributed via multiple shops
+* A shop can sell multiple copies of a book
 
 ### API
 
